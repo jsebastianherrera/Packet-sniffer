@@ -1,4 +1,5 @@
 import socket
+from termcolor import colored
 from ICMP import ICMP
 from TCP import TCP
 from Ipv4 import Ipv4
@@ -11,12 +12,12 @@ if __name__ == '__main__':
         mac_header = MacHeader(raw_ethernet)
         if mac_header.type == 8:
             ipv4 = Ipv4(mac_header.data)
-            # ICMP
+            # ICMP green
             if ipv4.protocol == 1:
                 icmp = ICMP(ipv4.data)
-                print(icmp)
-            # TCP
+                print(colored("ICMP", "green"), icmp)
+            # TCP blue
             elif ipv4.protocol == 6:
                 tcp = TCP(ipv4.data)
-                print(tcp)
+                print(colored("TCP:", "blue"), tcp)
             # HTTP
