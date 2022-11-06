@@ -22,8 +22,8 @@ def decryptMessage(cipher, key):
     try:
         msg = ''.join(sum(dec_cipher, []))
     except TypeError:
-        raise TypeError("This program cannot",
-                        "handle repeating words.")
+        print("This program cannot",
+              "handle repeating words.")
     null_count = msg.count('_')
     if null_count > 0:
         return msg[: -null_count]
@@ -33,5 +33,7 @@ def decryptMessage(cipher, key):
 # This code is contributed by Aditya K
 if __name__ == '__main__':
     msg = input("Message: ")
-    key = input("Key: ")
-    print("Decryped Message: {}".format(decryptMessage(msg, key)))
+    length = len(msg)
+    for key in range(0, length):
+        print(str(key), " " + decryptMessage(msg, str(key)))
+        print("")
