@@ -1,27 +1,23 @@
 from fastapi import FastAPI
 import uvicorn
 import requests
-import math
+LETTERS = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
 
 
-def encryptMessage(msg, key):
-    cipher = ""
-    k_indx = 0
-    msg_len = float(len(msg))
-    msg_lst = list(msg)
-    key_lst = sorted(list(key))
-    col = len(key)
-    row = int(math.ceil(msg_len / col))
-    fill_null = int((row * col) - msg_len)
-    msg_lst.extend('_' * fill_null)
-    matrix = [msg_lst[i: i + col]
-              for i in range(0, len(msg_lst), col)]
-    for _ in range(col):
-        curr_idx = key.index(key_lst[k_indx])
-        cipher += ''.join([row[curr_idx]
-                           for row in matrix])
-        k_indx += 1
-    return cipher
+def encryptCipher(message, key):
+    translated = ''
+    for symbol in message:
+        if symbol in LETTERS:
+            num = LETTERS.find(symbol)  # get the number of the symbol
+            num = num + key
+            if num >= len(LETTERS):
+                num = num - len(LETTERS)
+            elif num < 0:
+                num = num + len(LETTERS)
+            translated = translated + LETTERS[num]
+    else:
+        translated = translated + symbol
+    return translated
 
 
 app = FastAPI()
@@ -33,7 +29,7 @@ def morty(key: str):
         'https://rickandmortyapi.com/api/character/290')
     data = response_API.text
     data = data.replace('"', "'")
-    return encryptMessage(data, key)
+    return encryptCipher(data, int(key))
 
 
 if __name__ == '__main__':
